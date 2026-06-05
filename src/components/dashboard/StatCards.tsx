@@ -35,7 +35,7 @@ interface StatCardsProps {
 
 export function StatCards({ bodegasActivas, bodegasInactivas, materialesActivos, materialesInactivos }: StatCardsProps) {
     return (
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <StatCard label="Bodegas Activas" value={bodegasActivas} color="green" />
             <StatCard label="Bodegas Inactivas" value={bodegasInactivas} color="slate" />
             <StatCard label="Mat. Activos" value={materialesActivos} color="blue" />

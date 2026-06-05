@@ -7,12 +7,14 @@ interface NavItemProps {
     icon: string;
     label: string;
     active: boolean;
+    onClick?: () => void;
 }
 
-function NavItem({ to, icon, label, active }: NavItemProps) {
+function NavItem({ to, icon, label, active, onClick }: NavItemProps) {
     return (
         <Link
             to={to}
+            onClick={onClick}
             className={`flex items-center px-3 py-3 rounded-lg transition-colors duration-200 ${
                 active
                     ? 'text-white font-semibold bg-gradient-to-r from-blue-900 to-transparent'
@@ -63,10 +65,11 @@ function CollapseGroup({ icon, label, active, defaultOpen = false, children }: C
     );
 }
 
-function SubLink({ to, label, active }: { to: string; label: string; active: boolean }) {
+function SubLink({ to, label, active, onClick }: { to: string; label: string; active: boolean; onClick?: () => void }) {
     return (
         <Link
             to={to}
+            onClick={onClick}
             className={`block px-4 py-2 transition-colors text-xs ${
                 active ? 'text-white font-semibold' : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
             }`}
@@ -84,7 +87,12 @@ function PlaceholderSubLink({ label }: { label: string }) {
     );
 }
 
-export function Sidebar() {
+interface SidebarProps {
+    isOpen: boolean;
+    onClose: () => void;
+}
+
+export function Sidebar({ isOpen, onClose }: SidebarProps) {
     const location = useLocation();
     const { usuario } = useAuthStore();
 
@@ -92,11 +100,23 @@ export function Sidebar() {
     const isAdmin = usuario?.rol === 'admin';
 
     return (
-        <aside className="fixed left-0 top-0 h-full z-40 flex flex-col overflow-y-auto w-64 bg-slate-900/95 backdrop-blur-xl shadow-2xl shadow-blue-900/20 text-sm">
+        <aside
+            className={`fixed left-0 top-0 h-full z-40 flex flex-col overflow-y-auto w-64 bg-slate-900/95 backdrop-blur-xl shadow-2xl shadow-blue-900/20 text-sm
+                transition-transform duration-300 ease-in-out
+                ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
+        >
             {/* Brand */}
             <div className="px-6 py-8 flex flex-col gap-1">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center justify-between gap-3">
                     <h1 className="text-xl font-black tracking-tighter text-white uppercase">SIGOP</h1>
+                    {/* Botón cerrar — solo en móvil */}
+                    <button
+                        onClick={onClose}
+                        className="md:hidden text-slate-400 hover:text-white transition-colors p-1 rounded"
+                        aria-label="Cerrar menú"
+                    >
+                        <span className="material-symbols-outlined">close</span>
+                    </button>
                 </div>
                 <p className="text-slate-400 text-xs font-medium uppercase tracking-widest">Control de Producción</p>
             </div>
@@ -110,6 +130,7 @@ export function Sidebar() {
                         icon="dashboard"
                         label="Dashboard"
                         active={isActive('/dashboard')}
+                        onClick={onClose}
                     />
                 )}
 
@@ -136,8 +157,8 @@ export function Sidebar() {
                 >
                     <PlaceholderSubLink label="Stock mínimo" />
                     <PlaceholderSubLink label="Alertas de bajo stock" />
-                    <SubLink to="/materiales" label="Materiales" active={isActive('/materiales')} />
-                    <SubLink to="/bodegas" label="Bodegas" active={isActive('/bodegas')} />
+                    <SubLink to="/materiales" label="Materiales" active={isActive('/materiales')} onClick={onClose} />
+                    <SubLink to="/bodegas" label="Bodegas" active={isActive('/bodegas')} onClick={onClose} />
                 </CollapseGroup>
 
                 {/* Reportes — placeholder */}
@@ -158,6 +179,7 @@ export function Sidebar() {
                             icon="admin_panel_settings"
                             label="Usuarios"
                             active={isActive('/usuarios')}
+                            onClick={onClose}
                         />
                         <button className="w-full flex items-center px-3 py-3 text-slate-400 hover:text-slate-200 hover:bg-white/5 transition-colors duration-200 rounded-lg">
                             <span className="material-symbols-outlined mr-3">settings</span>
