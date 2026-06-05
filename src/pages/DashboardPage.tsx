@@ -72,12 +72,12 @@ export function DashboardPage() {
     return (
         <div className="space-y-8">
             {/* Header */}
-            <div className="flex items-end justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
                 <div>
                     <span className="text-xs font-bold text-primary/40 uppercase tracking-[0.2em]">Panel Principal</span>
-                    <h2 className="text-3xl font-bold tracking-tight text-on-surface mt-1">Dashboard General</h2>
+                    <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-on-surface mt-1">Dashboard General</h2>
                 </div>
-                <div className="flex items-center px-3 py-1 bg-surface-container-high rounded-full text-xs font-medium text-secondary">
+                <div className="flex items-center self-start sm:self-auto px-3 py-1 bg-surface-container-high rounded-full text-xs font-medium text-secondary">
                     <span className="w-2 h-2 rounded-full bg-green-500 mr-2" />
                     Sistema Activo
                 </div>
